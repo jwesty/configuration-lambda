@@ -5,10 +5,10 @@ This tool was created for a way for anyone to easily run scripts that are pre-in
 
 <img width="885" alt="image" src="https://user-images.githubusercontent.com/19826851/191607963-e6c9aff4-7cac-4c73-8dc0-f486bd83391e.png">
 
-##Walkthrough: 
-1. The Configuration Orchestrator repository contains the Terraform for the Lambda and API Gateway: https://github.com/jwesty/configuration-lambda/blob/main/api_gateway.tf. The module generated from it is self-contained and the source code and libraries used by the Lambda are built through the main.tf Terraform. The module as referenced will deploy the API Gateway, the Lambda, and the zip file will be built automatically:
+## Walkthrough: 
+1. The Configuration Lambda repository contains the Terraform for the Lambda and API Gateway: https://github.com/jwesty/configuration-lambda/blob/main/api_gateway.tf. The module generated from it is self-contained and the source code and libraries used by the Lambda are built through the main.tf Terraform. The module as referenced will deploy the API Gateway, the Lambda, and the zip file will be built automatically:
 
-2. A .tmp folder will be created by the Terraform that contains a hash file of *.py files, requirements.txt, and main.tf. This way, if there are changes to these files, a new hash will be created and Terraform will detect the changes to the zip file. The repository has a Configuration Orchestration Action (Yaml) that provides several options in terms of Account, Target, Script, and Region for ease of use.
+2. A .tmp folder will be created by the Terraform that contains a hash file of *.py files, requirements.txt, and main.tf. This way, if there are changes to these files, a new hash will be created and Terraform will detect the changes to the zip file. The repository has a Configuration Lambda Action (Yaml) that provides several options in terms of Account, Target, Script, and Region for ease of use.
 
 
 3. For example, the data/payload sent from the Action to the Lambda will look as follows. This is based on the selections made in the Actions. This all hinges on the association name: 
