@@ -1,0 +1,65 @@
+name: "Configuration Lambda"
+on:
+  workflow_dispatch:
+    inputs:
+      target:
+        description: 'Target'
+        type: choice
+        required: true
+        options:
+        - <choose target>
+        - some_host
+      script:
+        description: 'Script'
+        type: choice
+        required: true
+        options:
+        - <choose script>
+        - some_association_name
+      account:
+        description: 'Account'
+        type: choice
+        required: true
+        options:
+        - <choose account>
+        - dev
+        - test
+      region:
+        description: 'Region'
+        type: choice
+        required: true
+        options:
+        - us-east-1
+        - us-west-2
+        default: 'us-east-1'
+
+jobs:
+  reconfigure_by_target:
+    name: "Reconfigure ${{ inputs.target }} ${{ inputs.account }} ${{ inputs.region }}"
+    runs-on: ubuntu-latest
+    env:
+      TARGET: ${{ inputs.target }}
+      REGION: ${{ inputs.region }}
+      ACCOUNT: ${{ inputs.account }}
+      ASSOCIATION: ${{ inputs.script }}
+      LAMBDA_ACCESS_KEY: ${{ secrets.ORCHESTRATION_LAMBDA_ACCESS_KEY }}
+
+    steps:
+    - name: echo_vars
+      run: echo "$TARGET $SCRIPT $REGION $ACCOUNT"
+    - name: Dev Post Lambda
+      if: ${{ env.ACCOUNT == 'dev'}}
+      uses: satak/webrequest-action@master
+      with:
+        url: 'https://<REPLACE_ME>.execute-api.${{ env.REGION }}.amazonaws.com/default/'
+        method: 'POST'
+        headers: '{"Content-Type": "application/json"}'
+        payload: '{"target": "${{ env.TARGET }}", "region": "${{ env.REGION }}", "account": "${{ env.ACCOUNT }}", "script": "${{ env.SCRIPT }}", "lambda_key": "${{ env.LAMBDA_ACCESS_KEY }}", "run_id": "${{ github.run_id }}"}'
+    - name: Test Post Lambda
+      if: ${{ env.ACCOUNT == 'test'}}
+      uses: satak/webrequest-action@master
+      with:
+        url: 'https://<REPLACE_ME>.execute-api.${{ env.REGION }}.amazonaws.com/default/'
+        method: 'POST'
+        headers: '{"Content-Type": "application/json"}'
+        payload: '{"target": "${{ env.TARGET }}", "region": "${{ env.REGION }}", "account": "${{ env.ACCOUNT }}", "script": "${{ env.SCRIPT }}", "lambda_key": "${{ env.LAMBDA_ACCESS_KEY }}", "run_id": "${{ github.run_id }}"}'
