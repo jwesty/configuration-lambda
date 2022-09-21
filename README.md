@@ -13,8 +13,14 @@ This tool was created for a way for anyone to easily run scripts that are pre-in
 
 3. For example, the data/payload sent from the Action to the Lambda will look as follows. This is based on the selections made in the Actions. This all hinges on the association name: 
 
+```
 'body': '{"target":"some_instance_name", "region":"us-east-1", "script":"reconfigure", "lambda_key":"secret-key-123", "run_id":"3240324780"}
+```
 
 4. The Lambda takes the data from the payload and will execute the script through SSM via State Manager > Associations. That code is outlined here: https://github.com/jwesty/configuration-lambda/blob/main/configuration-lambda.py#L8
 
 5. One of the first tasks of the Lambda is to validate that the call came from the GitHub Actions. This is a very important safety measure to ensure the actor calling the Lambda was in fact the GitHub Action. The Action passes the key along in the payload set here: Actions as well in the Secret Manager. These keys need to match or else the Lambda will reject the request.
+
+6. The Slack notification will contain links to the GH Actions job as well as the Lambda logs (direct link):
+<img width="490" alt="image" src="https://user-images.githubusercontent.com/19826851/191611574-b4b7a2ba-8ed4-434b-a5a2-e28363d0b38d.png">
+<img width="352" alt="image" src="https://user-images.githubusercontent.com/19826851/191611697-ad490814-4900-4532-be47-d62a0334d715.png">
