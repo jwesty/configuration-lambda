@@ -1,2 +1,2 @@
 # configuration-lambda
-APIG and Lambda executor with Actions and Slack integration
+API Gateway proxy to Lambda to run SSM Associations, with Actions and Slack integration with Terraform.
